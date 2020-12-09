@@ -129,7 +129,6 @@ param (
 
 #Requires -RunAsAdministrator
 
-Write-Host "##vso[task.setvariable variable=amiID;isOutput=true]'$VersionText'"
 # Output the Pipeline Switch Status
 Write-Host "Pipeline Switch"
 $Pipeline | Out-Default | Write-Host
@@ -148,16 +147,16 @@ if ( -not $script:IncludeDir)
 {
     # Log-Date can't be used yet as Framework has not been loaded
 
-	Write-Host "Initialising environment - presumed not running through RemotePS"
-	$MyInvocation.MyCommand.Path
-	$script:IncludeDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    Write-Host "Initialising environment - presumed not running through RemotePS"
+    $MyInvocation.MyCommand.Path
+    $script:IncludeDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-	. "$script:IncludeDir\Init-Baking-Vars.ps1"
-	. "$script:IncludeDir\Init-Baking-Includes.ps1"
+    . "$script:IncludeDir\Init-Baking-Vars.ps1"
+    . "$script:IncludeDir\Init-Baking-Includes.ps1"
 }
 else
 {
-	Write-Host "$(Log-Date) Environment already initialised"
+    Write-Host "$(Log-Date) Environment already initialised"
 }
 
 ###############################################################################
@@ -779,8 +778,8 @@ $jsonObject = @"
                     Write-RedOutput "Test-RegKeyValueIsNotNull script block in bake-ide-ami.ps1 is the <No file> in the stack dump below" | Out-Default | Write-Host
                     Write-RedOutput $_ | Out-Default | Write-Host
                     Write-RedOutput $PSItem.ScriptStackTrace | Out-Default | Write-Host
-                   cmd /c exit 1
-                   throw
+                    cmd /c exit 1
+                    throw
                 }
             }
         }
@@ -899,7 +898,10 @@ $jsonObject = @"
             Sleep -Seconds 10
         }
         Write-Host "$(Log-Date) AMI $amiID is available"
-        Write-Host "##vso[task.setvariable variable=amiID;isOutput=true]'$amiID'"
+        if($Pipeline) {
+            Write-Host "##vso[task.setvariable variable=instanceID;isOutput=true]$instanceid"
+            Write-Host "##vso[task.setvariable variable=amiID;isOutput=true]$amiID"
+        }
 
         # Add tags to snapshots associated with the AMI using Amazon.EC2.Model.EbsBlockDevice
 
