@@ -42,16 +42,16 @@ if ( -not $script:IncludeDir)
 {
     # Log-Date can't be used yet as Framework has not been loaded
 
-	Write-Output "Initialising environment - presumed not running through RemotePS"
-	$MyInvocation.MyCommand.Path
-	$script:IncludeDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    Write-Output "Initialising environment - presumed not running through RemotePS"
+    $MyInvocation.MyCommand.Path
+    $script:IncludeDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-	. "$script:IncludeDir\Init-Baking-Vars.ps1"
-	. "$script:IncludeDir\Init-Baking-Includes.ps1"
+    . "$script:IncludeDir\Init-Baking-Vars.ps1"
+    . "$script:IncludeDir\Init-Baking-Includes.ps1"
 }
 else
 {
-	Write-Output "$(Log-Date) Environment already initialised"
+    Write-Output "$(Log-Date) Environment already initialised"
 }
 
 ###############################################################################
@@ -184,9 +184,9 @@ try
     $TagDesc = "$($AmazonImage[0].Description) created on $($AmazonImage[0].CreationDate) with $script:instancename"
     $AmiName = "$Script:DialogTitle $VersionText $(Get-Date -format "yyyy-MM-ddTHH-mm-ss")"     # AMI ID must not contain colons
     $amiID = New-EC2Image -InstanceId $Script:instanceid -Name $amiName -Description $TagDesc
- 
-    $tagName = $amiName # String for use with the name TAG -- as opposed to the AMI name, which is something else and set in New-EC2Image
- 
+
+    $tagName = $amiName # String for use with the name TAG -- as opposed to the AMI name, which is something else and set in New-EC2Image   
+    
     New-EC2Tag -Resources $amiID -Tags @{ Key = "Name" ; Value = $amiName} # Add tags to new AMI
     
     while ( $true )
@@ -201,7 +201,7 @@ try
         Sleep -Seconds 10
     }
     Write-Output "$(Log-Date) AMI is available"
-  
+    
     # Add tags to snapshots associated with the AMI using Amazon.EC2.Model.EbsBlockDevice
 
     $amiBlockDeviceMapping = $amiProperties.BlockDeviceMapping # Get Amazon.Ec2.Model.BlockDeviceMapping
