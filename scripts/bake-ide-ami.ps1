@@ -129,6 +129,7 @@ param (
 
 #Requires -RunAsAdministrator
 
+Write-Host "##vso[task.setvariable variable=amiID;isOutput=true]'$VersionText'"
 # Output the Pipeline Switch Status
 Write-Host "Pipeline Switch"
 $Pipeline | Out-Default | Write-Host
@@ -898,6 +899,7 @@ $jsonObject = @"
             Sleep -Seconds 10
         }
         Write-Host "$(Log-Date) AMI $amiID is available"
+        Write-Host "##vso[task.setvariable variable=amiID;isOutput=true]'$amiID'"
 
         # Add tags to snapshots associated with the AMI using Amazon.EC2.Model.EbsBlockDevice
 
